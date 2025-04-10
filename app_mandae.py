@@ -10,7 +10,7 @@ import re
 
 st.set_page_config(page_title="Gerador Mandae", layout="centered")
 
-st.title("📦 Gerador Planilha Mandaê 📦")
+st.title("📦 Gerador Planilha Mandaê")
 st.write("Faça upload do seu arquivo .csv e baixe a planilha formatada para envio via Mandaê.")
 
 uploaded_file = st.file_uploader("Selecione o arquivo CSV", type=["csv"])
@@ -138,4 +138,4 @@ if uploaded_file:
     nome_arquivo = f"{len(saida_df)}Pedidos - {dia_util.strftime('%d.%m')} - L2.xlsx"
 
     st.success("Planilha gerada com sucesso!")
-    st.download_button(label="📥 Baixar Planilha Mandae", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    st.download_button(label="📥 Baixar Planilha Mandaê", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
