@@ -7,24 +7,26 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime, timedelta
 import io
 import re
-from PIL import Image
 
 st.set_page_config(page_title="Planilha Mandae - ArtStones", layout="centered")
 
-# Logo local
-logo = Image.open("logo_artstones.png")
-st.image(logo, width=200)
+logo_url = "https://www.artstones.com.br/arquivos/LogoArtStones.png"
+st.markdown(f'''
+    <div style="text-align:center; padding: 10px 0 20px 0;">
+        <img src="{logo_url}" width="200" />
+    </div>
+''', unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align:center; color:#333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center; color:#333333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#555555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("📎 Selecione o arquivo CSV", type=["csv"])
 
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1', sep=';', dtype=str)
-    except Exception as ex:
-        st.error(f"Erro ao ler o arquivo: {ex}")
+    except Exception as e:
+        st.error(f"Erro ao ler o arquivo: {e}")
         st.stop()
 
     if df['Destinatário'].isna().any():
@@ -145,4 +147,5 @@ if uploaded_file:
 
     st.markdown("<p style='color:#333333; font-weight:500;'>✅ Sua planilha tá prontinha! Baixe no botão abaixo:</p>", unsafe_allow_html=True)
     st.download_button(label="📥 Baixar Planilha", data=output, file_name=nome_arquivo,
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                       help="Clique para baixar o arquivo gerado.")
