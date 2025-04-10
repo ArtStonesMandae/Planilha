@@ -10,23 +10,23 @@ import re
 
 st.set_page_config(page_title="Planilha Mandae - ArtStones", layout="centered")
 
-logo_url = "https://www.artstones.com.br/arquivos/LogoArtStones.png"
+# Logo ArtStones
 st.markdown(f'''
     <div style="text-align:center; padding: 10px 0 20px 0;">
-        <img src="{logo_url}" width="200" />
+        <img src="https://www.artstones.com.br/arquivos/LogoArtStones.png" width="200" />
     </div>
 ''', unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align:center; color:#333333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#555555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center; color:#333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("📎 Selecione o arquivo CSV", type=["csv"])
 
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1', sep=';', dtype=str)
-    except Exception as e:
-        st.error(f"Erro ao ler o arquivo: {e}")
+    except Exception as ex:
+        st.error(f"Erro ao ler o arquivo: {ex}")
         st.stop()
 
     if df['Destinatário'].isna().any():
