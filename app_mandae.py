@@ -8,28 +8,49 @@ from datetime import datetime, timedelta
 import io
 import re
 
-st.set_page_config(page_title="Gerador Mandae", layout="centered")
+st.set_page_config(page_title="Planilha Mandae", layout="centered")
 
-st.title("📦 Gerador Planilha Mandaê")
-st.write("Faça upload do seu arquivo .csv e baixe a planilha formatada para envio via Mandaê.")
+st.markdown("<h2 style='text-align:center; color:#333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
 
-uploaded_file = st.file_uploader("Selecione o arquivo CSV", type=["csv"])
+uploaded_file = st.file_uploader("📎 Selecione o arquivo CSV", type=["csv"])
+
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1', sep=';', dtype=str)
-    except Exception as e:
-        st.error(f"Erro ao ler o arquivo: {e}")
+    except Exception as ex:
+        st.error(f"Erro ao ler o arquivo: {ex}")
+        st.stop()
+
+    # Verificação de CPF/CNPJ inválidos
+    linhas_com_erro = []
+    for i, row in df.iterrows():
+        cpf = str(row.get('CPF', '')).strip()
+        cnpj = str(row.get('CNPJ', '')).strip()
+        if pd.notna(cnpj) and cnpj:
+            doc = re.sub(r'\D', '', cnpj)
+            if len(doc) != 14:
+                linhas_com_erro.append(i + 2)
+        elif pd.notna(cpf) and cpf:
+            doc = re.sub(r'\D', '', cpf)
+            if len(doc) != 11:
+                linhas_com_erro.append(i + 2)
+        else:
+            linhas_com_erro.append(i + 2)
+
+    if linhas_com_erro:
+        st.error(f"⚠️ Existem documentos com tamanho inválido nas seguintes linhas do CSV: {linhas_com_erro}")
         st.stop()
 
     if df['Destinatário'].isna().any():
-        st.error("Existem linhas com DESTINATÁRIO vazio. Corrija antes de continuar.")
+        st.error("⚠️ Existem linhas com DESTINATÁRIO vazio. Corrija antes de continuar.")
         st.stop()
 
     def format_document(cpf, cnpj):
-        if pd.notna(cnpj):
-            return re.sub(r'\D', '', cnpj).zfill(14)
-        elif pd.notna(cpf):
-            return re.sub(r'\D', '', cpf).zfill(11)
+        if pd.notna(cnpj) and cnpj:
+            return re.sub(r'\D', '', cnpj)
+        elif pd.notna(cpf) and cpf:
+            return re.sub(r'\D', '', cpf)
         return ''
 
     def get_phone(row):
@@ -137,5 +158,6 @@ if uploaded_file:
         dia_util += timedelta(days=2)
     nome_arquivo = f"{len(saida_df)}Pedidos - {dia_util.strftime('%d.%m')} - L2.xlsx"
 
-    st.success("Planilha gerada com sucesso!")
-    st.download_button(label="📥 Baixar Planilha Mandaê", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    st.markdown("<p style='color:#333333; font-weight:500;'>✅ Sua planilha tá prontinha! Baixe no botão abaixo:</p>", unsafe_allow_html=True)
+    st.download_button(label="📥 Baixar Planilha", data=output, file_name=nome_arquivo,
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
