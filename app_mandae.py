@@ -13,7 +13,7 @@ st.set_page_config(page_title="Gerador Mandae", layout="centered")
 st.title("📦 Gerador de Planilhas Mandaê")
 st.write("Faça upload do seu arquivo .csv e baixe a planilha formatada para envio via Mandaê.")
 
-uploaded_file = st.file_uploader("Selecione o arquivo CSV", type=["csv"])
+uploaded_file = st.file_uploader("Selecione o arquivo CSV:", type=["csv"])
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1', sep=';', dtype=str)
