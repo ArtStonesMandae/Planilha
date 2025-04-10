@@ -8,31 +8,21 @@ from datetime import datetime, timedelta
 import io
 import re
 
-st.set_page_config(page_title="Planilha Mandae", layout="centered")
+st.set_page_config(page_title="Gerador Mandae", layout="centered")
 
-# Fundo personalizado na área central do app
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #FBE9E7;
-    }
-    </style>
-""", unsafe_allow_html=True)
+st.title("📦 Gerador Planilha Mandaê")
+st.write("Faça upload do seu arquivo .csv e baixe a planilha formatada para envio via Mandaê.")
 
-st.markdown("<h2 style='text-align:center; color:#333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
-
-uploaded_file = st.file_uploader("📎 Selecione o arquivo CSV", type=["csv"])
-
+uploaded_file = st.file_uploader("Selecione o arquivo CSV", type=["csv"])
 if uploaded_file:
     try:
         df = pd.read_csv(uploaded_file, encoding='latin1', sep=';', dtype=str)
-    except Exception as ex:
-        st.error(f"Erro ao ler o arquivo: {ex}")
+    except Exception as e:
+        st.error(f"Erro ao ler o arquivo: {e}")
         st.stop()
 
     if df['Destinatário'].isna().any():
-        st.error("⚠️ Existem linhas com DESTINATÁRIO vazio. Corrija antes de continuar.")
+        st.error("Existem linhas com DESTINATÁRIO vazio. Corrija antes de continuar.")
         st.stop()
 
     def format_document(cpf, cnpj):
@@ -147,6 +137,5 @@ if uploaded_file:
         dia_util += timedelta(days=2)
     nome_arquivo = f"{len(saida_df)}Pedidos - {dia_util.strftime('%d.%m')} - L2.xlsx"
 
-    st.markdown("<p style='color:#333333; font-weight:500;'>✅ Sua planilha tá prontinha! Baixe no botão abaixo:</p>", unsafe_allow_html=True)
-    st.download_button(label="📥 Baixar Planilha", data=output, file_name=nome_arquivo,
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    st.success("Planilha gerada com sucesso!")
+    st.download_button(label="📥 Baixar Planilha Mandaê", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
