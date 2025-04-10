@@ -7,15 +7,13 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime, timedelta
 import io
 import re
+from PIL import Image
 
 st.set_page_config(page_title="Planilha Mandae - ArtStones", layout="centered")
 
-# Logo ArtStones
-st.markdown(f'''
-    <div style="text-align:center; padding: 10px 0 20px 0;">
-        <img src="https://www.artstones.com.br/arquivos/LogoArtStones.png" width="200" />
-    </div>
-''', unsafe_allow_html=True)
+# Logo local
+logo = Image.open("logo_artstones.png")
+st.image(logo, width=200)
 
 st.markdown("<h2 style='text-align:center; color:#333;'>Gerador de Planilhas Mandae</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; color:#555;'>Suba o arquivo CSV dos pedidos e gere sua planilha formatada com 1 clique!</p>", unsafe_allow_html=True)
@@ -147,5 +145,4 @@ if uploaded_file:
 
     st.markdown("<p style='color:#333333; font-weight:500;'>✅ Sua planilha tá prontinha! Baixe no botão abaixo:</p>", unsafe_allow_html=True)
     st.download_button(label="📥 Baixar Planilha", data=output, file_name=nome_arquivo,
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                       help="Clique para baixar o arquivo gerado.")
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
