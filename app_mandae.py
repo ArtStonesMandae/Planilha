@@ -9,26 +9,23 @@ import re
 
 st.set_page_config(page_title="Gerador Mandae", layout="centered")
 
-# Estilo personalizado
+# CSS personalizado para estilizar o botão de upload
 st.markdown("""
 <style>
-    .stApp {
-        font-family: 'Segoe UI', sans-serif;
-    }
-    div.stButton > button {
-        background-color: #6A1B9A;
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        height: 45px;
-        margin-top: 10px;
-    }
-    .footer {
-        margin-top: 2em;
-        text-align: center;
-        color: gray;
-        font-size: 0.9em;
-    }
+div[data-testid="stFileUploader"] > section > button {
+    background-color: #6A1B9A;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    height: 45px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+div[data-testid="stFileUploader"] > section > div > span {
+    font-size: 14px;
+    color: #6A1B9A;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -161,6 +158,3 @@ if uploaded_file:
 
     st.success("✅ Planilha gerada com sucesso!")
     st.download_button(label="📥 Baixar Planilha Mandaê", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
-# Rodapé
-st.markdown("<div class='footer'>🔷 Desenvolvido por ArtStones • streamlit.app</div>", unsafe_allow_html=True)
