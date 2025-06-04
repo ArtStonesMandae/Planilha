@@ -9,26 +9,6 @@ import re
 
 st.set_page_config(page_title="Gerador Mandae", layout="centered")
 
-# CSS personalizado para estilizar o botão de upload
-st.markdown("""
-<style>
-div[data-testid="stFileUploader"] > section > button {
-    background-color: #6A1B9A;
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    height: 45px;
-    margin-top: 10px;
-    border: none;
-    cursor: pointer;
-}
-div[data-testid="stFileUploader"] > section > div > span {
-    font-size: 14px;
-    color: #6A1B9A;
-}
-</style>
-""", unsafe_allow_html=True)
-
 st.title("📦 Gerador de Planilhas Mandaê")
 st.write("Faça upload do seu arquivo .csv e baixe a planilha formatada para envio via Mandaê.")
 
@@ -156,5 +136,5 @@ if uploaded_file:
         dia_util += timedelta(days=2)
     nome_arquivo = f"{len(saida_df)}Pedidos - {dia_util.strftime('%d.%m')} - L2.xlsx"
 
-    st.success("✅ Planilha gerada com sucesso!")
+    st.success("Planilha gerada com sucesso!")
     st.download_button(label="📥 Baixar Planilha Mandaê", data=output, file_name=nome_arquivo, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
