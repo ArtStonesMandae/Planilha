@@ -20,6 +20,11 @@ if uploaded_file:
         st.error(f"Erro ao ler o arquivo: {e}")
         st.stop()
 
+    # Preencher 'Destinatário' vazio com 'Nome do Cliente'
+    df['Destinatário'] = df['Destinatário'].replace('', pd.NA)
+    df['Destinatário'] = df['Destinatário'].fillna(df['Nome do Cliente'])
+
+    # Verificação final
     if df['Destinatário'].isna().any():
         st.error("Existem linhas com DESTINATÁRIO vazio. Corrija antes de continuar.")
         st.stop()
